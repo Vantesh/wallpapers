@@ -26,7 +26,7 @@ jobs:
 
       - name: Create zip archive
         run: |
-          zip -r wallpapers.zip Wallpapers/
+          zip wallpapers.zip *.jpg *.jpeg *.png
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
