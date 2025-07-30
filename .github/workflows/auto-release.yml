@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   bump-version-and-release:
     name: Bump tag, create release, upload wallpapers
