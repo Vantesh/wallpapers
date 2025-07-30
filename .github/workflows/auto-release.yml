@@ -1,0 +1,36 @@
+name: Auto Release Wallpapers
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  bump-version-and-release:
+    name: Bump tag, create release, upload wallpapers
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Auto bump tag (patch by default)
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create zip archive
+        run: |
+          zip -r wallpapers.zip Wallpapers/
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: "Automated release for ${{ steps.tag_version.outputs.new_tag }}"
+          files: wallpapers.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
